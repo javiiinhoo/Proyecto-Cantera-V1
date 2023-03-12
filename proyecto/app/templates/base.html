@@ -1,0 +1,43 @@
+<nav>
+    <ul>
+        <li><a href="{% url 'index' %}">Inicio</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'perfil' %}">Perfil</a></li>
+        <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+        {% else %}
+        <li><a href="{% url 'registro' %}">Registro</a></li>
+        <li><a href="{% url 'inicio_sesion' %}">Iniciar sesión</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<style>
+    nav {
+        background-color: #f1f1f1;
+        overflow: hidden;
+        font-size: 18px;
+    }
+
+    nav ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    nav ul li {
+        margin: 0 5px;
+    }
+
+    nav ul li a {
+        display: block;
+        color: #333;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    nav ul li a:hover {
+        background-color: #ddd;
+    }
+</style>

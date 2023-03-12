@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Bienvenido</h1>
+        {% if user.is_authenticated %}
+        <p class="lead">Bienvenido, {{ user.username }}.</p>
+        {% else %}
+        <p class="lead">Iniciar sesión para continuar.</p>
+        <a class="btn btn-primary btn-lg" href="{% url 'inicio_sesion' %}" role="button">Iniciar sesión</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+<style>
+    .jumbotron {
+        background-color: #f2f2f2;
+        margin-top: 50px;
+        padding: 50px;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 48px;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 24px;
+    }
+</style>
