@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% load static %}{% block content %}<div class="container">
+    <h1 class="mb-4">Lista de jugadores</h1>{% if jugadores %}<table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Enlace</th>
+                <th>Temporada</th>
+                <th>Fecha</th>
+                <th>Último club</th>
+                <th>Nuevo club</th>
+                <th>Valor de mercado</th>
+                <th>Coste</th>
+            </tr>
+        </thead>
+        <tbody>{% for jugador in jugadores %}<tr>
+                <td>{{ jugador.nombre }}</td>
+                <td><a href="{{ jugador.enlace }}" target="_blank">{{ jugador.enlace }}</a></td>
+                <td>{{ jugador.temporada }}</td>
+                <td>{{ jugador.fecha }}</td>
+                <td>{{ jugador.ultimo_club }}</td>
+                <td>{{ jugador.nuevo_club }}</td>
+                <td>{{ jugador.valor_mercado }}</td>
+                <td>{{ jugador.coste }}</td>
+            </tr>{% endfor %}</tbody>
+    </table>{% else %}<p>No hay
+        jugadores disponibles. Por favor importa jugadores para continuar.</p>{% endif %}
+</div>{% endblock %} {% block extra_css %}
+<link href="{% static 'lista_jugadores.css' %}" rel="stylesheet">{% endblock %}

@@ -1,0 +1,64 @@
+.jumbotron h1 {
+    text-shadow: 2px 2px #000;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    transition: transform .3s ease-in-out;
+    color: #fff
+}
+
+.jumbotron p {
+    opacity: .8;
+    text-shadow: 1px 1px #000;
+    font-size: 24px;
+    margin-bottom: 50px;
+    opacity: 0;
+    transition: opacity .5s ease-in-out;
+    color: #fff
+}
+
+.lead {
+    text-align: center;
+}
+
+.jumbotron {
+    background-color: #c90016;
+    margin-top: 50px;
+    padding: 50px;
+    text-align: center;
+    position: relative
+}
+
+.jumbotron:hover h1 {
+    transform: scale(1.1)
+}
+
+.jumbotron:hover p {
+    opacity: 1
+}
+
+
+.gallery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    width: 600px;
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery img {
+    height: 400px;
+    width: fit-content;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.gallery img.active {
+    opacity: 1;
+}

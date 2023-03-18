@@ -1,35 +1,9 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="container">
+{% extends 'base.html' %} {% block content %}<div class="container">
     <div class="card">
         <div class="card-body">
             <h2 class="card-title mb-4">Vista protegida</h2>
             <p class="card-text">Solo usuarios autenticados pueden ver esta página.</p>
         </div>
     </div>
-</div>
-{% endblock %}
-
-<style>
-    .container {
-        margin-top: 50px;
-    }
-
-    .card {
-        width: 60%;
-        margin: auto;
-    }
-
-    h2.card-title {
-        font-size: 36px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    p.card-text {
-        font-size: 24px;
-        text-align: center;
-    }
-</style>
+</div>{% endblock %} {% block css %}
+<link href="{% static 'adminpage.css' %}" rel="stylesheet">{% endblock %}

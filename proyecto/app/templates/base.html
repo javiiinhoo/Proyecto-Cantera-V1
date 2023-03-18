@@ -1,43 +1,105 @@
-<nav>
-    <ul>
-        <li><a href="{% url 'index' %}">Inicio</a></li>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'perfil' %}">Perfil</a></li>
-        <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
-        {% else %}
-        <li><a href="{% url 'registro' %}">Registro</a></li>
-        <li><a href="{% url 'inicio_sesion' %}">Iniciar sesión</a></li>
-        {% endif %}
-    </ul>
-</nav>
-<style>
-    nav {
-        background-color: #f1f1f1;
-        overflow: hidden;
-        font-size: 18px;
-    }
+<!doctypehtml> {% load static %}<html lang="es">
 
-    nav ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        display: flex;
-        justify-content: space-between;
-    }
+    <head>
+        <meta charset="UTF-8">
+        <meta content="width=device-width,initial-scale=1" name="viewport">
+        <title>{% block title %}{% endblock %}</title>
+        <link href="{% static 'css/base.css' %}" rel="stylesheet">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+            crossorigin="anonymous" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T">
+        <link href="path/to/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" crossorigin="anonymous"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"></script>
+    </head>
 
-    nav ul li {
-        margin: 0 5px;
-    }
+    <body>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Inicio</a></li>{% if user.is_authenticated %}<li><a
+                        href="{% url 'perfil' username=user.username %}">Perfil</a></li>
+                <li><a href="{% url 'buscar_jugador' %}">Buscar jugadores</a></li>
+                <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>{% else %}<li><a
+                        href="{% url 'registro' %}">Registro</a></li>
+                <li><a href="{% url 'inicio_sesion' %}">Iniciar sesión</a></li>{% endif %}
+            </ul>
+        </nav>
+        <div class="container">{% block content %}{% endblock %}</div>
+        <footer class="mt-5">
+            <div class="container">
+                <div class="accordion" id="accordionFooter">
+                    <div class="card">
+                        <div class="card-header" id="headingContacto">
+                            <h3 class="mb-0"><button aria-controls="collapseContacto" aria-expanded="false"
+                                    class="btn btn-link collapsed d-inline-block" data-target="#collapseContacto"
+                                    data-toggle="collapse" type="button">Contacto</button></h3>
+                        </div>
+                        <div class="collapse" id="collapseContacto" aria-labelledby="headingContacto"
+                            data-parent="#accordionFooter">
+                            <div class="card-body">
+                                <p>Dirección: Avda. de La Habana, s/n. 15011 A Coruña (España)</p>
+                                <p>Correo electrónico: info@rcdeportivo.es</p><a
+                                    href="mailto:info@rcdeportivo.es?Subject=Consulta">Contactar por correo</a>
+                                <p>Teléfono: +34 981 253 300</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingSiguenos">
+                            <h3 class="mb-0"><button aria-controls="collapseSiguenos" aria-expanded="false"
+                                    class="btn btn-link collapsed d-inline-block" data-target="#collapseSiguenos"
+                                    data-toggle="collapse" type="button">Síguenos</button></h3>
+                        </div>
+                        <div class="collapse" id="collapseSiguenos" aria-labelledby="headingSiguenos"
+                            data-parent="#accordionFooter">
+                            <div class="card-body">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item"><a href="https://www.facebook.com/rcdeportivo"><i
+                                                class="fa-2x fab fa-facebook"></i></a></li>
+                                    <li class="list-inline-item"><a href="https://twitter.com/rcdeportivo"><i
+                                                class="fa-2x fab fa-twitter"></i></a></li>
+                                    <li class="list-inline-item"><a href="https://www.instagram.com/rcdeportivo/"><i
+                                                class="fa-2x fab fa-instagram"></i></a></li>
+                                    <li class="list-inline-item"><a
+                                            href="https://www.linkedin.com/company/real-club-deportivo-de-la-coru%C3%B1a/"><i
+                                                class="fa-2x fab fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between" id="headingEnlacesInteres">
+                            <h3 class="mb-0"><button aria-controls="collapseEnlacesInteres" aria-expanded="false"
+                                    class="btn btn-link collapsed d-inline-block" data-target="#collapseEnlacesInteres"
+                                    data-toggle="collapse" type="button">Enlaces de interés</button></h3>
+                        </div>
+                        <div class="collapse" id="collapseEnlacesInteres" aria-labelledby="headingEnlacesInteres"
+                            data-parent="#accordionFooter">
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><a href="https://www.rcdeportivo.es/">Web oficial del Real Club Deportivo de La
+                                            Coruña</a></li>
+                                    <li><a href="https://tienda.rcdeportivo.es/">Tienda oficial del Real Club Deportivo
+                                            de La Coruña</a></li>
+                                    <li><a href="https://abonos.rcdeportivo.es/">Abonos Real Club Deportivo de La
+                                            Coruña</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="headingDerechos" class="derechos-reservados">
+                        <h2 class="mb-0">Todos los derechos reservados © Real Club Deportivo de La Coruña {% now "Y" %}</h2>
+                      </div>
+                </div>
+            </div>
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="{% static 'js/base.js' %}"></script>
+    </body>
 
-    nav ul li a {
-        display: block;
-        color: #333;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-
-    nav ul li a:hover {
-        background-color: #ddd;
-    }
-</style>
+    </html>

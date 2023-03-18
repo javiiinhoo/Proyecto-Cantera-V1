@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'app'
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -82,9 +83,28 @@ DATABASES = {
     }
 }
 
+# Define the base URL for media files
+MEDIA_URL = '/media/'
+
+# Define the absolute filesystem path to the directory
+# where your media files are stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Define the base URL for static files
+STATIC_URL = '/static/'
+
+# Define the absolute filesystem path to the directory
+# where your static files are stored
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+
+# Define the app directories to look for static files
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "app/static"),
+]
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

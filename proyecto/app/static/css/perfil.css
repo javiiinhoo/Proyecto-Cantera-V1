@@ -1,0 +1,82 @@
+.container {
+    width: 80%;
+    margin: auto
+}
+
+.card {
+    margin-top: 30px
+}
+
+.card-body {
+    text-align: center
+}
+
+.card-title {
+    margin-top: 10px
+}
+
+.form-group {
+    margin-bottom: 20px
+}
+
+input[type=submit] {
+    margin: auto;
+    border-radius: 40%
+}
+
+img.profile-photo {
+    height: 100px;
+    max-width: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: .3s
+}
+
+img.profile-photo:hover {
+    height: 150px;
+    max-width: 150px;
+    animation: 2.4s ease-in-out infinite pulse
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1)
+    }
+
+    50% {
+        transform: scale(1.2)
+    }
+}
+
+.btn {
+    border-radius: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    transition: .3s
+}
+
+.btn-danger {
+    background-color: red;
+    border-radius: 20px
+}
+
+.btn:hover {
+    opacity: .8
+}
+
+.card-body>form {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.btn-primary {
+    background-color: #007bff;
+    display: block;
+    margin: 40px auto;
+    border-radius: 20px
+}

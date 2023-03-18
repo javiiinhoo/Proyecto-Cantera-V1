@@ -1,16 +1,5 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h2>Busqueda de jugadores</h2>
-<form method="GET">
-    <input type="text" name="jugador" placeholder="Ingrese el nombre del jugador">
-    <button type="submit">Buscar</button>
-</form>
-{% if jugador %}
-{% if jugador_no_encontrado %}
-{% include 'jugador_no_encontrado.html' %}
-{% else %}
-{% include 'jugadores_encontrados.html' %}
-{% endif %}
-{% endif %}
-{% endblock %}
+{% extends 'base.html' %} {% block content %}<h2>Busqueda de jugadores</h2>
+<form><input name="jugador" placeholder="Ingrese el nombre del jugador"> <button type="submit">Buscar</button></form>{%
+if jugador %} {% if jugador_no_encontrado %} {% include 'jugador_no_encontrado.html' %} {% else %} {% include
+'jugadores_encontrados.html' %} {% endif %} {% endif %} {% endblock %} {% block css %}
+<link href="{% static 'formulario_busqueda.css' %}" rel="stylesheet">{% endblock %}

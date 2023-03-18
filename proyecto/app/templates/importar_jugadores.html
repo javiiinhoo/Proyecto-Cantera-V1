@@ -1,46 +1,27 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 <div class="container">
     <h1 class="mb-4">Importar jugadores</h1>
-    {% if form.errors %}
-    <div class="alert alert-danger">
-        <p>Por favor, corrige los siguientes errores:</p>
-        <ul>
-            {% for field in form %}
-            {% for error in field.errors %}
-            <li>{{ field.label }}: {{ error }}</li>
-            {% endfor %}
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    <form method="post" enctype="multipart/form-data">
+    <form enctype="multipart/form-data" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary mt-3">Importar</button>
+        <button class="btn btn-primary mt-3" type="submit">Importar</button>
     </form>
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 </div>
 {% endblock %}
 
 {% block extra_css %}
-<style>
-    .container {
-        margin-top: 50px;
-        width: 100%;
-        text-align: center;
-    }
-
-    h1 {
-        font-size: 36px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .alert {
-        font-size: 20px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-</style>
+{% block css %}
+<link href="{% static 'importar_jugadores.css' %}" rel="stylesheet">
+{% endblock %}
 {% endblock %}
