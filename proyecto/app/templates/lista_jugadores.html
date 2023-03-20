@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %}{% block content %}<div class="container">
+{% extends 'base.html' %} {% load static %} {% block content %}<div class="container">
     <h1 class="mb-4">Lista de jugadores</h1>{% if jugadores %}<table>
         <thead>
             <tr>
@@ -25,4 +25,6 @@
     </table>{% else %}<p>No hay
         jugadores disponibles. Por favor importa jugadores para continuar.</p>{% endif %}
 </div>{% endblock %} {% block extra_css %}
+
+
 <link href="{% static 'lista_jugadores.css' %}" rel="stylesheet">{% endblock %}

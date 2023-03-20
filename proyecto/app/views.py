@@ -126,38 +126,6 @@ def eliminar_foto(request, username):
     return render(request, 'perfil.html', {'perfil_form': perfil_form, 'perfil': perfil})
 
 
-def buscar_jugador(request):
-    jugadores = []
-    jugadores_en_bd = Jugador.objects.all()
-    if not jugadores_en_bd:
-        messages.warning(
-            request, 'No se encontraron jugadores en la base de datos. Por favor, importe los jugadores.')
-        return redirect('importar_jugadores')
-    if request.method == 'POST':
-        form = BuscarJugadorForm(request.POST)
-        if form.is_valid():
-            nombre_jugador = form.cleaned_data['nombre']
-            jugadores = Jugador.objects.filter(
-                nombre__icontains=nombre_jugador)
-            if not jugadores:
-                messages.warning(
-                    request, 'No se encontraron jugadores con ese nombre.')
-    else:
-        form = BuscarJugadorForm()
-    configuracion = Configuracion.objects.first()
-    if not configuracion:
-        messages.success(
-            request, 'No se encontró ninguna configuración. Por favor, importe los jugadores.')
-        return redirect('importar_jugadores')
-    if configuracion.ultima_importacion < timezone.now()-timezone.timedelta(weeks=6):
-        messages.success(
-            request, 'La última importación se realizó hace más de 6 semanas. Por favor, importe los jugadores.')
-        return redirect('importar_jugadores')
-    if len(jugadores) > 0:
-        return redirect('lista_jugadores')
-    return render(request, 'buscar_jugador.html', {'form': form, 'jugadores': jugadores})
-
-
 def importar_jugadores(request):
     if request.method == 'POST':
         form = ImportarJugadoresForm(request.POST, request.FILES)
@@ -204,6 +172,41 @@ def importar_jugadores(request):
     return render(request, 'importar_jugadores.html', context)
 
 
-def lista_jugadores(request):
-    jugadores = Jugador.objects.all()
+def buscar_jugador(request):
+    jugadores = []
+    jugadores_en_bd = Jugador.objects.all()
+    if not jugadores_en_bd:
+        messages.warning(
+            request, 'No se encontraron jugadores en la base de datos. Por favor, importe los jugadores.')
+        return redirect('importar_jugadores')
+    if request.method == 'POST':
+        form = BuscarJugadorForm(request.POST)
+        if form.is_valid():
+            nombre_jugador = form.cleaned_data['nombre']
+            jugadores = Jugador.objects.filter(
+                nombre__icontains=nombre_jugador)
+            if not jugadores:
+                messages.warning(
+                    request, 'No se encontraron jugadores con ese nombre.')
+            else:
+                return redirect('lista_jugadores', query=nombre_jugador)
+    else:
+        form = BuscarJugadorForm()
+    configuracion = Configuracion.objects.first()
+    if not configuracion:
+        messages.success(
+            request, 'No se encontró ninguna configuración. Por favor, importe los jugadores.')
+        return redirect('importar_jugadores')
+    if configuracion.ultima_importacion < timezone.now()-timezone.timedelta(weeks=6):
+        messages.success(
+            request, 'La última importación se realizó hace más de 6 semanas. Por favor, importe los jugadores.')
+        return redirect('importar_jugadores')
+    return render(request, 'buscar_jugador.html', {'form': form, 'jugadores': jugadores})
+
+
+def lista_jugadores(request, query=None):
+    if query:
+        jugadores = Jugador.objects.filter(nombre__icontains=query)
+    else:
+        jugadores = Jugador.objects.all()
     return render(request, 'lista_jugadores.html', {'jugadores': jugadores})

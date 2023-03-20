@@ -12,8 +12,6 @@
             <p class="lead">Bienvenido, {{user.username}}.</p>
             {% else %}
             <p class="lead">Regístrate o inicia sesión para empezar.</p>
-            <a class="btn btn-lg btn-primary" href="{% url 'registro' %}">Regístrate</a>
-            <a class="btn btn-lg btn-outline-light" href="{% url 'inicio_sesion' %}">Inicia sesión</a>
             {% endif %}
         </div>
     </div>
