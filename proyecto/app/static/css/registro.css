@@ -1,43 +1,42 @@
 .container {
     margin-top: 50px;
     width: 100%;
-    text-align: center;
+    text-align: center
 }
 
 h2 {
     font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-weight: 700;
+    margin-bottom: 20px
 }
 
 label {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 700
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+input[type=email],
+input[type=password],
+input[type=text] {
     font-size: 18px;
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;
-    border: none;
-    border: 1px solid #ddd;
+    border: 1px solid #ddd
 }
 
-button[type="submit"] {
+button[type=submit] {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 700;
     padding: 10px 20px;
     border-radius: 5px;
     border: none;
     background-color: #007bff;
     color: #fff;
-    cursor: pointer;
+    cursor: pointer
 }
 
-button[type="submit"]:hover {
-    background-color: #0062cc;
+button[type=submit]:hover {
+    background-color: #0062cc
 }

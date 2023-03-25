@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% load static %} {% block content %}<div class="container">
-    <h1 class="mb-4">Lista de jugadores</h1>{% if jugadores %}<table>
+{% extends 'base.html' %} {% load static %} {% block content %}<div class="container-table">
+    <h1 class="mb-4 text-center">Lista de jugadores</h1>{% if jugadores %}<table>
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -14,7 +14,11 @@
         </thead>
         <tbody>{% for jugador in jugadores %}<tr>
                 <td>{{ jugador.nombre }}</td>
+                {% if jugador.enlace_visited %}
+                <td><a href="{{ jugador.enlace }}" target="_blank" class="visited-link">{{ jugador.enlace }}</a></td>
+                {% else %}
                 <td><a href="{{ jugador.enlace }}" target="_blank">{{ jugador.enlace }}</a></td>
+                {% endif %}
                 <td>{{ jugador.temporada }}</td>
                 <td>{{ jugador.fecha }}</td>
                 <td>{{ jugador.ultimo_club }}</td>
@@ -22,9 +26,8 @@
                 <td>{{ jugador.valor_mercado }}</td>
                 <td>{{ jugador.coste }}</td>
             </tr>{% endfor %}</tbody>
-    </table>{% else %}<p>No hay
-        jugadores disponibles. Por favor importa jugadores para continuar.</p>{% endif %}
-</div>{% endblock %} {% block extra_css %}
-
-
-<link href="{% static 'lista_jugadores.css' %}" rel="stylesheet">{% endblock %}
+    </table>{% else %}<p>No hay jugadores disponibles. Por favor importa jugadores para continuar.</p>{% endif %}
+    {% block extra_css %}
+    <link href="{% static 'css/lista_jugadores.css' %}" rel="stylesheet">
+    <script src="{% static 'js/lista_jugadores.js' %}"></script>{% endblock %}
+</div>{% endblock %}

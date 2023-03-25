@@ -5,6 +5,11 @@ import os
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Func
+
+
+class Unaccent(Func):
+    function = 'UNACCENT'
 
 
 class Jugador(models.Model):
@@ -26,14 +31,27 @@ class Profile(models.Model):
                               blank=True, null=True, default='default_profile_photo.png')
     direccion = models.CharField(max_length=255, blank=True)
     telefono = models.CharField(max_length=20, blank=True)
+    aprobado = models.BooleanField(default=False)
     def __str__(self): return self.user.username
 
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        profile = Profile.objects.create(user=instance, aprobado=False)
 
 
 class Configuracion(models.Model):
     ultima_importacion = models.DateTimeField(default=timezone.now)
+
+
+class SolicitudVerificacion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    creado = models.DateTimeField(auto_now_add=True)
+    mensaje = models.TextField()
+
+    class Meta:
+        ordering = ['-creado']
+
+    def __str__(self):
+        return f'Solicitud de verificación de {self.user.username}'

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Aprobación de registros de usuarios</h1>
+
+{% if profiles %}
+<div class="row">
+    {% for profile in profiles %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ profile.user.username }}</h5>
+                <p class="card-text">{{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+                <p class="card-text">{{ profile.user.email }}</p>
+                <p class="card-text">{{ profile.direccion }}</p>
+                <p class="card-text">{{ profile.telefono }}</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" value="{{ profile.user.id }}">
+                    <button type="submit" name="action" value="approve" class="btn btn-success mr-2">Aprobar</button>
+                    <button type="submit" name="action" value="reject" class="btn btn-danger">Rechazar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>No hay perfiles pendientes de aprobación</p>
+{% endif %}
+{% endblock %}

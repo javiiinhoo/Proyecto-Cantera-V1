@@ -13,6 +13,10 @@
             {% else %}
             <p class="lead">Regístrate o inicia sesión para empezar.</p>
             {% endif %}
+
+            {% if not request.user.is_anonymous and not user.profile.aprobado %}
+            <p>Su cuenta aún no ha sido aprobada por el administrador.</p>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -20,8 +24,10 @@
     <div class="row">
         <div class="col-md-8 offset-md-2 text-center">
             <div class="gallery mx-auto">
-                <img src="https://cflvdg.avoz.es/sc/AjKozSPoeEw9CTs1K7cz4a2qkmk=/x/2023/03/12/00121678655761937444346/Foto/i12m3047.jpg" alt="Imagen 1" class="active">
-                <img src="https://cflvdg.avoz.es/sc/_pSMniX4IAq7qilbJ7lDqQiEshY=/1280x/2021/10/20/00121634764802360565458/Foto/GO21P43F1_231932.jpg" alt="Imagen 2">
+                <img src="https://cflvdg.avoz.es/sc/AjKozSPoeEw9CTs1K7cz4a2qkmk=/x/2023/03/12/00121678655761937444346/Foto/i12m3047.jpg"
+                    alt="Imagen 1" class="active">
+                <img src="https://cflvdg.avoz.es/sc/_pSMniX4IAq7qilbJ7lDqQiEshY=/1280x/2021/10/20/00121634764802360565458/Foto/GO21P43F1_231932.jpg"
+                    alt="Imagen 2">
                 <img src="https://www.elidealgallego.com/images/showid2/5513385?w=900" alt="Imagen 3">
                 <img src="https://www.dxtcampeon.com/images/showid2/5614054?w=900" alt="Imagen 4">
             </div>

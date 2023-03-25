@@ -1,0 +1,22 @@
+h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 2px 2px 2px #000000;
+}
+
+.lead {
+    font-size: 1.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 1px #000000;
+}
+
+
+body {
+    background-color: #0d3f8d;
+    background-image: url('https://www.rcdeportivo.es/assets/wallpapers/wallpaper.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    color: #ffffff;
+}

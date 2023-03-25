@@ -1,15 +1,26 @@
+from django.utils.html import strip_tags
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from .forms import SolicitudVerificacionForm
+from .models import SolicitudVerificacion
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import update_session_auth_hash
+from unidecode import unidecode
+from django.shortcuts import render, get_object_or_404, redirect
+from django.conf import settings
+from .models import Unaccent
+from django.db.models import Q
 import datetime
 import io
 from django.utils import timezone
 from django.shortcuts import redirect, render
-from .forms import BuscarJugadorForm
+from .forms import BuscarJugadorForm, CambiarContraseñaForm
 from .models import Jugador, Configuracion
 from django.shortcuts import redirect
 from .models import Profile
 from .forms import ProfileForm
 from django.shortcuts import get_object_or_404, redirect, render
 from app.models import Profile
-from django.http import JsonResponse
 import csv
 from django.shortcuts import render, redirect
 from .models import Jugador
@@ -19,7 +30,6 @@ from django.shortcuts import render
 from app.models import Jugador
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import BuscarJugadorForm, LoginForm, ProfileForm, RegisterForm
@@ -30,9 +40,11 @@ def registro(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            print(user)
+            user = form.save(commit=False)
+            user.is_active = True
+            user.save()
+            messages.success(
+                request, 'Se ha registrado correctamente. Su cuenta está pendiente de verificación por el administrador')
             return redirect('index')
         else:
             print(form.errors)
@@ -44,20 +56,29 @@ def registro(request):
 @login_required
 def perfil(request, username):
     user = get_object_or_404(User, username=username)
-    perfil_usuario = user.profile
+    if user.profile.aprobado == 0:
+        return render(request, 'permisos_denegados.html', {'mensaje': 'Tu cuenta está pendiente de verificación por el administrador'})
     if request.user != user:
         return HttpResponse('No está autorizado para ver este perfil.')
     if request.method == 'POST':
         perfil_form = ProfileForm(
-            request.POST, request.FILES, instance=perfil_usuario)
+            request.POST, request.FILES, instance=user.profile)
         if perfil_form.is_valid():
-            perfil_form.save()
-            messages.success(
-                request, 'Se han guardado los cambios en el perfil')
+            try:
+                perfil_form.save()
+                messages.success(
+                    request, 'Se han guardado los cambios en el perfil')
+            except Exception as e:
+                print('Error al guardar los cambios en el perfil:', e)
+                messages.error(
+                    request, 'Ha ocurrido un error al guardar los cambios en el perfil')
             return redirect('perfil', username=username)
     else:
-        perfil_form = ProfileForm(instance=perfil_usuario)
-    context = {'perfil': perfil_usuario, 'perfil_form': perfil_form}
+        perfil_form = ProfileForm(instance=user.profile)
+    context = {'perfil': user.profile, 'perfil_form': perfil_form}
+    if not user.profile.photo:
+        context['default_profile_photo'] = settings.MEDIA_URL + \
+            'default_profile_photo.png'
     return render(request, 'perfil.html', context)
 
 
@@ -68,35 +89,54 @@ def inicio_sesion(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
+            print('username:', username)
+            print('password:', password)
+            print('user:', user)
             if user is not None:
                 login(request, user)
                 return redirect('index')
             else:
                 form.add_error(None, 'Usuario o contraseña incorrectos')
+                print('formulario inválido:', form.errors)
     else:
         form = LoginForm()
     return render(request, 'inicio_sesion.html', {'form': form})
 
 
-@login_required
-def adminpage(request): return render(request, 'adminpage.html')
-def index(request): return render(request, 'index.html')
+def index(request):
+    user = request.user
+    if user.is_authenticated:
+        if not user.profile.aprobado:
+            if user.is_staff:
+                messages.warning(
+                    request, 'Su cuenta aún no ha sido aprobada por el administrador.')
+            else:
+                return redirect('aprobacion_registro')
+    return render(request, 'index.html')
 
 
 @login_required
 def cambiar_contraseña(request):
+    mensaje = None
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        form = CambiarContraseñaForm(request.user, request.POST)
         if form.is_valid():
-            request.user = form.save()
+            password_nuevo = form.cleaned_data['password_nuevo']
+            request.user.set_password(password_nuevo)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
             messages.success(
-                request, 'Tu contraseña ha sido cambiada exitosamente.')
+                request, 'Tu contraseña ha sido cambiada exitosamente.'
+            )
             return redirect('perfil')
     else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'cambiar_contraseña.html', {'form': form})
+        form = CambiarContraseñaForm(request.user)
+    return render(
+        request, 'cambiar_contraseña.html', {'form': form, 'mensaje': mensaje}
+    )
 
 
+@login_required
 def cerrar_sesion(request): logout(request); return redirect('index')
 
 
@@ -126,6 +166,7 @@ def eliminar_foto(request, username):
     return render(request, 'perfil.html', {'perfil_form': perfil_form, 'perfil': perfil})
 
 
+@login_required
 def importar_jugadores(request):
     if request.method == 'POST':
         form = ImportarJugadoresForm(request.POST, request.FILES)
@@ -172,6 +213,7 @@ def importar_jugadores(request):
     return render(request, 'importar_jugadores.html', context)
 
 
+@login_required
 def buscar_jugador(request):
     jugadores = []
     jugadores_en_bd = Jugador.objects.all()
@@ -183,8 +225,9 @@ def buscar_jugador(request):
         form = BuscarJugadorForm(request.POST)
         if form.is_valid():
             nombre_jugador = form.cleaned_data['nombre']
-            jugadores = Jugador.objects.filter(
-                nombre__icontains=nombre_jugador)
+            nombre_jugador_ascii = unidecode(nombre_jugador)
+            jugadores = Jugador.objects.filter(Q(nombre__icontains=nombre_jugador) | Q(
+                nombre__icontains=nombre_jugador_ascii))
             if not jugadores:
                 messages.warning(
                     request, 'No se encontraron jugadores con ese nombre.')
@@ -210,3 +253,59 @@ def lista_jugadores(request, query=None):
     else:
         jugadores = Jugador.objects.all()
     return render(request, 'lista_jugadores.html', {'jugadores': jugadores})
+
+
+@staff_member_required
+@login_required
+def aprobacion_registro(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+        action = request.POST.get('action')
+        try:
+            profile = Profile.objects.get(user_id=user_id)
+            if action == 'approve':
+                profile.aprobado = True
+                profile.save()
+                messages.success(
+                    request, f'El perfil de {profile.user.username} ha sido aprobado')
+            elif action == 'reject':
+                profile.delete()
+                messages.success(
+                    request, f'El perfil de {profile.user.username} ha sido rechazado')
+        except Profile.DoesNotExist:
+            messages.error(request, 'El perfil no existe')
+        return redirect('aprobacion_registro')
+    else:
+        profiles = Profile.objects.filter(aprobado=False)
+        return render(request, 'aprobacion_registro.html', {'profiles': profiles})
+
+
+@login_required
+def solicitar_verificacion(request):
+    if request.method == 'POST':
+        form = SolicitudVerificacionForm(request.POST)
+        if form.is_valid():
+            solicitud = form.save(commit=False)
+            solicitud.user = request.user
+            solicitud.save()
+            return redirect('perfil')
+    else:
+        form = SolicitudVerificacionForm()
+    return render(request, 'solicitar_verificacion.html', {'form': form})
+
+
+def enviar_email_registro(request, usuario):
+    # Obtener los detalles del usuario recién registrado
+    username = usuario.username
+    email = usuario.email
+    password = request.POST.get('password1')
+
+    # Configurar el contenido del correo electrónico
+    html_message = render_to_string(
+        'email_registro.html', {'username': username, 'password': password})
+    plain_message = strip_tags(html_message)
+    subject = 'Gracias por registrarte en nuestro sitio web'
+
+    # Enviar el correo electrónico al usuario
+    send_mail(subject, plain_message, 'tucorreodeemail@gmail.com',
+              [email], html_message=html_message)

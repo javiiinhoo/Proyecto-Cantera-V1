@@ -3,13 +3,15 @@ body {
     font-size: 16px;
     line-height: 1.5;
     color: #333;
-    background-color: #fff
+    min-height: 100vh;
+    background-color: #fff;
+    position: relative;
 }
 
 .container {
     max-width: 960px;
-    margin: 0 auto;
-    padding: 20px
+    margin: auto 0px auto auto;
+
 }
 
 a {
@@ -77,8 +79,8 @@ nav ul li.active a {
 
 .card {
     width: fit-content;
+    margin-top: 10px;
     height: 150px;
-    margin-bottom: 15px;
     background-color: #f5f5f5;
     box-shadow: 0 1px 3px rgba(0, 0, 0, .1), 0 1px 2px rgba(0, 0, 0, .05);
     border-radius: 10px;
@@ -117,17 +119,15 @@ nav ul li.active a {
 }
 
 footer {
-    margin-top: 50px !important;
-    background-color: #005ea4;
-    padding: 10px 20px;
-    text-align: center;
-    overflow: hidden;
-    display: flex !important;
-    align-items: end;
-    flex-direction: column;
     position: fixed;
     bottom: 0;
-    width: 100%
+    height: 230px;
+    width: 100%;
+    background-color: #005ea4;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: 50px;
 }
 
 footer>div,
@@ -139,8 +139,9 @@ footer>ul {
 
 footer .container {
     display: flex;
+    margin-top: -25px;
     flex-wrap: wrap;
-    justify-content: center
+    justify-content: center;
 }
 
 footer h3 {
@@ -194,7 +195,6 @@ footer .card-header {
 }
 
 footer .btn {
-    background-color: transparent;
     font-size: 1.25rem;
     padding: .5rem 1rem;
     transition: .2s ease-in-out
@@ -227,11 +227,11 @@ footer .card-header .btn:not(.collapsed)::after {
 
 footer .card-body a i {
     font-size: 2rem;
-    margin-right: 1rem
 }
 
 footer .card-body a:hover i {
-    color: #fff
+    transform: translateY(-5px);
+    border: none
 }
 
 @media only screen and (max-width:767px) {

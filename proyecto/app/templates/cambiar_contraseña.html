@@ -1,12 +1,41 @@
-{% extends 'base.html' %} {% block content %}<div class="container">
-    <h2 class="mb-4">Cambiar contraseña</h2>{% if mensaje %}<p>{{ mensaje }}</p>{% endif %}<form method="POST">{%
-        csrf_token %}<div class="form-group"><label for="password_actual">Contraseña actual:</label> <input
-                class="form-control" name="password_actual" required type="password"></div>
-        <div class="form-group"><label for="password_nuevo">Contraseña nueva:</label> <input class="form-control"
-                name="password_nuevo" required type="password"></div>
-        <div class="form-group"><label for="password_confirmacion">Confirmar contraseña:</label> <input
-                class="form-control" name="password_confirmacion" required type="password"></div><button
-            class="btn btn-primary" type="submit">Cambiar contraseña</button>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Cambiar contraseña</h2>
+    {% if mensaje %}
+        <div class="alert alert-success">{{ mensaje }}</div>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="password_actual">Contraseña actual:</label>
+            <input class="form-control" name="password_actual" required type="password">
+        </div>
+        <div class="form-group">
+            <label for="password_nuevo">Contraseña nueva:</label>
+            <input class="form-control" name="password_nuevo" required type="password">
+        </div>
+        <div class="form-group">
+            <label for="password_confirmacion">Confirmar contraseña:</label>
+            <input class="form-control" name="password_confirmacion" required type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Cambiar contraseña</button>
     </form>
-</div>{% endblock %} {% block css %}
-<link href="{% static 'cambiar_contraseña.css' %}" rel="stylesheet">{% endblock %}
+    {% if errores %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for error in errores %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/cambiar_contraseña.css' %}" rel="stylesheet">
+{% endblock %}

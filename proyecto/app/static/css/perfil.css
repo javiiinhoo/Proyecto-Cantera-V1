@@ -3,10 +3,6 @@
     margin: auto
 }
 
-.card {
-    margin-top: 30px
-}
-
 .card-body {
     text-align: center
 }
@@ -52,8 +48,6 @@ img.profile-photo:hover {
 
 .btn {
     border-radius: 20px;
-    background-color: #007bff;
-    color: #fff;
     border: none;
     padding: 10px 20px;
     transition: .3s
